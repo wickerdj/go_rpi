@@ -13,6 +13,8 @@ type HCSR04 struct {
 }
 
 // NewHCSR04 : Sets up a new HC-SR04 sensor
+//
+// Uses the BCM number system
 func NewHCSR04(echoPin int, triggerPin int) (result HCSR04) {
 	err := rpio.Open()
 	if err != nil {

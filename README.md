@@ -19,6 +19,18 @@ GOARM=7 GOARCH=arm GOOS=linux go build {filename.go}
 
 CC=arm-linux-gnueabi-gcc CGO_ENABLED=1 GOOS=linux GOARCH=arm GOARM=7 go build {filename.go}
 
+# Sensors
+## HC-SR04
+Ultasonic Ranging Module HC-SR04 - https://cdn.sparkfun.com/datasheets/Sensors/Proximity/HCSR04.pdf
+
+HC-SR04 Ultrasonic Range Sensor on the Raspberry Pi - https://www.modmypi.com/blog/hc-sr04-ultrasonic-range-sensor-on-the-raspberry-pi
+
+Using a Raspberry Pi distance sensor (ultrasonic sensor HC-SR04) - https://tutorials-raspberrypi.com/raspberry-pi-ultrasonic-sensor-hc-sr04/
+
+Raspberry Pi Distance Sensor: How to setup the HC-SR04 - https://pimylifeup.com/raspberry-pi-distance-sensor/
+
+Ultrasonic Sensor (HC-SR04) + Raspberry Pi - https://classes.engineering.wustl.edu/ese205/core/index.php?title=Ultrasonic_Sensor_(HC-SR04)_%2B_Raspberry_Pi
+
 # Misc
 ## GO Packages for working with the Raspberry Pi 
 
