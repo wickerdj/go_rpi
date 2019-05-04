@@ -31,13 +31,13 @@ func NewHCSR04(echoPin int, triggerPin int) (result HCSR04) {
 // Measure : Takes a measurement then returns the distance in centimetre (centimeter or cm)
 func (sensor *HCSR04) Measure() float64 {
 	sensor.TriggerPin.Output()
+	sensor.EchoPin.Output()
 	sensor.TriggerPin.Low()
-
-	sensor.EchoPin.Input()
 	sensor.EchoPin.Low()
 
-	delay(1000)
+	sensor.EchoPin.Input()
 
+	delay(200)
 	sensor.TriggerPin.High()
 	delay(15)
 	sensor.TriggerPin.Low()
