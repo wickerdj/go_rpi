@@ -42,15 +42,19 @@ func (sensor *HCSR04) Measure() float64 {
 	delay(15)
 	sensor.TriggerPin.Low()
 
-	start := time.Now().UnixNano()
-
 	hardStop := 1000000
+
+	log.Printf(" sensor.EchoPin: %v", sensor.EchoPin.Read())
+
+	start := time.Now().UnixNano()
 
 	for i := 0; i <= hardStop && sensor.EchoPin.Read() != rpio.Low; i++ {
 		delay(1)
 	}
 
 	stop := time.Now().UnixNano()
+
+	log.Printf(" sensor.EchoPin: %v", sensor.EchoPin.Read())
 
 	// speed of sound 343 meters per second
 	// 343 m/s = 34300cm/s
