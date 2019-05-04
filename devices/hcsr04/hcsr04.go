@@ -22,7 +22,7 @@ func NewHCSR04(echoPin int, triggerPin int) (result HCSR04) {
 		panic(err.Error)
 	}
 
-	result.TriggerPin = rpio.Pin(echoPin)
+	result.EchoPin = rpio.Pin(echoPin)
 	result.TriggerPin = rpio.Pin(triggerPin)
 
 	return
