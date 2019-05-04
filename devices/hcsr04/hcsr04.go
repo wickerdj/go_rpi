@@ -29,7 +29,7 @@ func NewHCSR04(echoPin int, triggerPin int) (result HCSR04) {
 }
 
 // Measure : Takes a measurement then returns the distance in centimetre (centimeter or cm)
-func (sensor *HCSR04) Measure() float32 {
+func (sensor *HCSR04) Measure() float64 {
 	sensor.TriggerPin.Output()
 	sensor.EchoPin.Output()
 	sensor.TriggerPin.Low()
@@ -68,7 +68,7 @@ func (sensor *HCSR04) Measure() float32 {
 	// 17150 is half of 34300
 
 	// dur := stop.Sub(start)
-	dur := float32(stop.UnixNano()-start.UnixNano()) / (58.0 * 1000)
+	dur := float64(stop.UnixNano()-start.UnixNano()) / (58.0 * 1000)
 	log.Printf("start: %v stop: %v dur: %v", start.UnixNano(), stop.UnixNano(), dur)
 
 	return dur
