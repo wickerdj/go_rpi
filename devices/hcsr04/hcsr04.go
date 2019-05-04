@@ -61,7 +61,7 @@ func (sensor *HCSR04) Measure() float64 {
 	// 17150 is half of 34300
 
 	// dur := stop.Sub(start)
-	dur := float64((stop.UnixNano - start.UnixNano) / time.Microsecond)
+	dur := float64((stop.UnixNano() - start.UnixNano()) / 1000)
 	log.Printf("start: %v stop: %v dur: %v", start, stop, dur)
 
 	return dur.Seconds() * 17150
