@@ -29,13 +29,16 @@ func NewHCSR04(echoPin int, triggerPin int) (result HCSR04) {
 }
 
 // Measure : Takes a measurement then returns the distance in centimetre (centimeter or cm)
-func (sensor *HCSR04) Measure() float64 {
+func (sensor *HCSR04) Measure() float32 {
 	sensor.TriggerPin.Output()
 	sensor.EchoPin.Output()
 	sensor.TriggerPin.Low()
 	sensor.EchoPin.Low()
 
 	sensor.EchoPin.Input()
+
+	strobeZero := 0
+	strobeOne := 0
 
 	delay(200)
 	sensor.TriggerPin.High()
@@ -46,13 +49,13 @@ func (sensor *HCSR04) Measure() float64 {
 
 	log.Printf(" sensor.EchoPin: %v", sensor.EchoPin.Read())
 
-	start := time.Now().UnixNano()
-
-	for i := 0; i <= hardStop && sensor.EchoPin.Read() != rpio.Low; i++ {
+	for strobeZero = 0; strobeZero < hardStop && sensor.EchoPin.Read() != rpio.High; strobeZero++ {
+	}
+	start := time.Now()
+	for strobeOne = 0; strobeOne < hardStop && sensor.EchoPin.Read() != rpio.Low; strobeOne++ {
 		delay(1)
 	}
-
-	stop := time.Now().UnixNano()
+	stop := time.Now()
 
 	log.Printf(" sensor.EchoPin: %v", sensor.EchoPin.Read())
 
@@ -65,10 +68,10 @@ func (sensor *HCSR04) Measure() float64 {
 	// 17150 is half of 34300
 
 	// dur := stop.Sub(start)
-	dur := float64((stop - start) / 1000)
-	log.Printf("start: %v stop: %v dur: %v", start, stop, dur)
+	dur := float32(stop.UnixNano()-start.UnixNano()) / (58.0 * 1000)
+	log.Printf("start: %v stop: %v dur: %v", start.UnixNano(), stop.UnixNano(), dur)
 
-	return dur * 17150
+	return dur
 
 }
 
