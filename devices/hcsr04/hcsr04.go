@@ -44,11 +44,10 @@ func (sensor *HCSR04) Measure() float64 {
 
 	start := time.Now().UnixNano()
 
-	hardStop := 1000
+	hardStop := 1000000
 
 	for i := 0; i <= hardStop && sensor.EchoPin.Read() != rpio.Low; i++ {
 		delay(1)
-		log.Printf("i: %v", i)
 	}
 
 	stop := time.Now().UnixNano()
@@ -62,7 +61,7 @@ func (sensor *HCSR04) Measure() float64 {
 	// 17150 is half of 34300
 
 	// dur := stop.Sub(start)
-	dur := float64(stop - start)
+	dur := float64((stop - start) / 1000)
 	log.Printf("start: %v stop: %v dur: %v", start, stop, dur)
 
 	return dur * 17150
