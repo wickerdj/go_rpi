@@ -23,8 +23,11 @@ CC=arm-linux-gnueabi-gcc CGO_ENABLED=1 GOOS=linux GOARCH=arm GOARM=7 go build {f
 ## GO Packages for working with the Raspberry Pi 
 
 gobot - https://gobot.io/documentation/platforms/raspi/
+
 go-rpio - https://github.com/stianeikeland/go-rpio
+
 go-wiringpi - https://github.com/eternal-flame-AD/go-wiringpi
+
 periph - Peripherals I/O in go - https://periph.io - https://github.com/google/periph
 
 ## Notes on pin
@@ -34,4 +37,5 @@ Raspberry Pi Pinout - https://pinout.xyz - https://github.com/Gadgetoid/Pinout.x
 ## General Reference
 
 RPi Low-level peripherals - https://elinux.org/RPi_Low-level_peripherals
+
 Raspberry Pi on Wikipedia - https://en.wikipedia.org/wiki/Raspberry_Pi
