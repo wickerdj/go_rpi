@@ -1,6 +1,7 @@
 package hcsr04
 
 import (
+	"log"
 	"time"
 
 	"github.com/stianeikeland/go-rpio"
@@ -60,6 +61,7 @@ func (sensor *HCSR04) Measure() float64 {
 	// 17150 is half of 34300
 
 	dur := stop.Sub(start)
+	log.Printf("start: %v stop: %v dur: %v", start, stop, dur)
 
 	return dur.Seconds() * 17150
 
