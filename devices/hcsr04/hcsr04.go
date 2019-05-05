@@ -1,11 +1,30 @@
+// Package hcsr04 : Library for working with the Ultrasonic Ranging Module HC - SR04
+//
+// From the datasheet:
+// Ultrasonic ranging module HC - SR04 provides 2cm - 400cm non-contact
+// measurement function, the ranging accuracy can reach to 3mm. The modules
+// includes ultrasonic transmitters, receiver and control circuit. The basic principle
+// of work:
+//		(1) Using IO trigger for at least 10us high level signal,
+// 		(2) The Module automatically sends eight 40 kHz and detect whether there is a
+// pulse signal back.
+// 		(3) IF the signal back, through high level, time of high output IO duration is
+// the time from sending ultrasonic to returning.
+// Test distance = (high level time×velocity of sound (340M/S) / 2,
+//
+// You can calculate the range through the time interval between sending trigger signal and
+// receiving echo signal. Formula: uS / 58 = centimeters or uS / 148 =inch; or: the
+// range = high level time * velocity (340M/S) / 2; we suggest to use over 60ms
+// measurement cycle, in order to prevent trigger signal to the echo signal.
 package hcsr04
 
 import (
-	"log"
 	"time"
 
 	"github.com/stianeikeland/go-rpio"
 )
+
+const offset = 58000.0
 
 // HCSR04 : Model to keep track the GPIO pins to use
 type HCSR04 struct {
@@ -16,19 +35,21 @@ type HCSR04 struct {
 // NewHCSR04 : Sets up a new HC-SR04 sensor
 //
 // Uses the BCM number system
-func NewHCSR04(echoPin int, triggerPin int) (result HCSR04) {
+func NewHCSR04(echoPin int, triggerPin int) HCSR04 {
 	err := rpio.Open()
 	if err != nil {
 		panic(err.Error)
 	}
 
+	var result HCSR04
+
 	result.EchoPin = rpio.Pin(echoPin)
 	result.TriggerPin = rpio.Pin(triggerPin)
 
-	return
+	return result
 }
 
-// Measure : Takes a measurement then returns the distance in centimetre (centimeter or cm)
+// Measure : Takes a measurement then returns the distance in centimeter
 func (sensor *HCSR04) Measure() float64 {
 	sensor.TriggerPin.Output()
 	sensor.EchoPin.Output()
@@ -37,42 +58,34 @@ func (sensor *HCSR04) Measure() float64 {
 
 	sensor.EchoPin.Input()
 
-	strobeZero := 0
-	strobeOne := 0
+	delay(6000)
 
-	delay(200)
+	// Send trigger pluse
 	sensor.TriggerPin.High()
 	delay(15)
 	sensor.TriggerPin.Low()
 
 	hardStop := 1000000
 
-	log.Printf(" sensor.EchoPin: %v", sensor.EchoPin.Read())
-
-	for strobeZero = 0; strobeZero < hardStop && sensor.EchoPin.Read() != rpio.High; strobeZero++ {
+	// Burst Loop - Wait for the module to send the 8 cycle burst
+	for i := 0; i < hardStop && sensor.EchoPin.Read() != rpio.High; i++ {
 	}
+
+	// Timing Circuit / Signal back
 	start := time.Now()
-	for strobeOne = 0; strobeOne < hardStop && sensor.EchoPin.Read() != rpio.Low; strobeOne++ {
+	for i := 0; i < hardStop && sensor.EchoPin.Read() != rpio.Low; i++ {
 		delay(1)
 	}
 	stop := time.Now()
 
-	log.Printf(" sensor.EchoPin: %v", sensor.EchoPin.Read())
-
-	// speed of sound 343 meters per second
-	// 343 m/s = 34300cm/s
-	// 34300 cm/s = 0.0343 cm/mu (mu=microsecond)
-	// 34300 cm/s = 34.3 cm/ms (ms=millisecond)
-	// 34300 cm/s = 3.43e-5 cm/ns (ns=nanosecond)
-	// Need to account for amount of time to go there and back
-	// 17150 is half of 34300
-
-	// dur := stop.Sub(start)
-	dur := float64(stop.UnixNano()-start.UnixNano()) / (58.0 * 1000)
-	log.Printf("start: %v stop: %v dur: %v", start.UnixNano(), stop.UnixNano(), dur)
+	// Calculation
+	// Golang doesn't offer a unix epoch time in microseconds. Need to shift by 1000 to get to microsecond
+	// The datasheet says 'uS/58 = centimeters', if I multiple the 58 by 1000 this makes the Formula 'nS/58000 = cm'
+	// I can save a little bit of time and resources by calculating the denominator and making it a constant
+	dur := float64(stop.UnixNano()-start.UnixNano()) / offset
+	// log.Printf("start: %v stop: %v dur: %v", start.UnixNano(), stop.UnixNano(), dur)
 
 	return dur
-
 }
 
 func delay(mu int) {

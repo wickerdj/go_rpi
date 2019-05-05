@@ -19,9 +19,17 @@ GOARM=7 GOARCH=arm GOOS=linux go build {filename.go}
 
 CC=arm-linux-gnueabi-gcc CGO_ENABLED=1 GOOS=linux GOARCH=arm GOARM=7 go build {filename.go}
 
-# Sensors
-## HC-SR04
+# Devices
+## HC-SR04 Sensor
+### Datasheet 
 Ultasonic Ranging Module HC-SR04 - https://cdn.sparkfun.com/datasheets/Sensors/Proximity/HCSR04.pdf
+
+Ultrasonic ranging module : HC-SR04 version 2 - https://www.electroschematics.com/wp-content/uploads/2013/07/HC-SR04-datasheet-version-2.pdf
+
+HC-SR04 User Guide - https://www.mpja.com/download/hc-sr04_ultrasonic_module_user_guidejohn.pdf
+
+
+### Helpful Blog posts
 
 HC-SR04 Ultrasonic Range Sensor on the Raspberry Pi - https://www.modmypi.com/blog/hc-sr04-ultrasonic-range-sensor-on-the-raspberry-pi
 

@@ -7,7 +7,7 @@ import (
 	hc "github.com/wickerdj/go_rpi/devices/hcsr04"
 )
 
-func main() {
+func exampleUsingHcsr() {
 	// Uses the BCM number system
 	h := hc.NewHCSR04(8, 24)
 
@@ -16,4 +16,8 @@ func main() {
 		fmt.Printf("object is %fcm away\n", distance)
 		time.Sleep(time.Second)
 	}
+}
+
+func main() {
+	exampleUsingHcsr()
 }
