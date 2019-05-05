@@ -1,5 +1,5 @@
 # go_rpi
-Reboot of a set experiments, libraries, and tools for working with a Raspberry Pi. 
+Rebooting of experiments, libraries, and tools for working with a Raspberry Pi. 
 
 ## Installation
 `go get -d -u github.com/wickerdj/go_rpi`
@@ -9,26 +9,22 @@ If the above throws an error, remove the switches -d and -u and try again. The n
 ## Documentation
 Not yet
 
-## build command
-
+## Build Command
 ### For Raspberry Pi A, A+, B, B+, Zero
 `GOARM=6 GOARCH=arm GOOS=linux go build {filename.go}`
 
-### Raspberry Pi 2, 3
+### For Raspberry Pi 2, 3
 `GOARM=7 GOARCH=arm GOOS=linux go build {filename.go}`
 
 ### Cross compile with a C library.
-
 `CC=arm-linux-gnueabi-gcc CGO_ENABLED=1 GOOS=linux GOARCH=arm GOARM=7 go build {filename.go}`
 
 # Devices
 ## HC-SR04 Sensor
 ### Datasheet 
-Ultasonic Ranging Module HC-SR04 - https://cdn.sparkfun.com/datasheets/Sensors/Proximity/HCSR04.pdf
-
-Ultrasonic ranging module : HC-SR04 version 2 - https://www.electroschematics.com/wp-content/uploads/2013/07/HC-SR04-datasheet-version-2.pdf
-
-HC-SR04 User Guide - https://www.mpja.com/download/hc-sr04_ultrasonic_module_user_guidejohn.pdf
+* Ultasonic Ranging Module HC-SR04 - https://cdn.sparkfun.com/datasheets/Sensors/Proximity/HCSR04.pdf
+* Ultrasonic ranging module : HC-SR04 version 2 - https://www.electroschematics.com/wp-content/uploads/2013/07/HC-SR04-datasheet-version-2.pdf
+* HC-SR04 User Guide - https://www.mpja.com/download/hc-sr04_ultrasonic_module_user_guidejohn.pdf
 
 
 ### Helpful Blog posts
