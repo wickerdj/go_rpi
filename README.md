@@ -2,7 +2,9 @@
 Reboot of a set experiments, libraries, and tools for working with a Raspberry Pi. 
 
 ## Installation
-go get -u github.com/wickerdj/go_rpi
+`go get -d -u github.com/wickerdj/go_rpi`
+
+If the above throws an error, remove the switches -d and -u and try again. The new command would be `go get github.com/wickerdj/go_rpi`. Double check that files were downloaded.
 
 ## Documentation
 Not yet
@@ -10,14 +12,14 @@ Not yet
 ## build command
 
 ### For Raspberry Pi A, A+, B, B+, Zero
-GOARM=6 GOARCH=arm GOOS=linux go build {filename.go}
+`GOARM=6 GOARCH=arm GOOS=linux go build {filename.go}`
 
 ### Raspberry Pi 2, 3
-GOARM=7 GOARCH=arm GOOS=linux go build {filename.go}
+`GOARM=7 GOARCH=arm GOOS=linux go build {filename.go}`
 
 ### Cross compile with a C library.
 
-CC=arm-linux-gnueabi-gcc CGO_ENABLED=1 GOOS=linux GOARCH=arm GOARM=7 go build {filename.go}
+`CC=arm-linux-gnueabi-gcc CGO_ENABLED=1 GOOS=linux GOARCH=arm GOARM=7 go build {filename.go}`
 
 # Devices
 ## HC-SR04 Sensor
