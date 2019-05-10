@@ -33,9 +33,6 @@ Not yet
 * [Ultrasonic Sensor (HC-SR04) + Raspberry Pi](https://classes.engineering.wustl.edu/ese205/core/index.php?title=Ultrasonic_Sensor_(HC-SR04)_%2B_Raspberry_Pi)
 
 # Misc
-## Raspberry Pi
-* [Raspberry Pi hardware](https://www.raspberrypi.org/documentation/hardware/raspberrypi/)
-
 ## GO Packages for working with the Raspberry Pi 
 * [gobot](https://gobot.io/documentation/platforms/raspi/)
 * [go-rpio](https://github.com/stianeikeland/go-rpio)
@@ -46,5 +43,6 @@ Not yet
 * [Raspberry Pi Pinout](https://pinout.xyz) - [github](https://github.com/Gadgetoid/Pinout.xyz)
 
 ## General Reference
+* [Raspberry Pi hardware](https://www.raspberrypi.org/documentation/hardware/raspberrypi/)
 * [RPi Low-level peripherals](https://elinux.org/RPi_Low-level_peripherals)
 * [Raspberry Pi on Wikipedia](https://en.wikipedia.org/wiki/Raspberry_Pi)
