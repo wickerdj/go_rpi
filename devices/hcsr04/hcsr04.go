@@ -19,12 +19,14 @@
 package hcsr04
 
 import (
+	"log"
 	"time"
 
 	"github.com/stianeikeland/go-rpio"
 )
 
 const divisor = 58000.0
+const hardStop = 1000000
 
 // HCSR04 : Model to keep track the GPIO pins to use
 type HCSR04 struct {
@@ -51,41 +53,51 @@ func NewHCSR04(echoPin int, triggerPin int) HCSR04 {
 
 // Measure : Takes a measurement then returns the distance in centimeter
 func (sensor *HCSR04) Measure() float64 {
+	setSensorPinsState(sensor)
+
+	delay(6000)
+
+	trigger(sensor)
+
+	// Calculation
+	// Golang doesn't offer a unix epoch time in microseconds. Need to shift by 1000 to get to microsecond
+	// The datasheet says 'uS/58 = centimeters', if I multiple the 58 by 1000 this makes the Formula 'nS/58000 = cm'
+	// I can save a little bit of time and resources by calculating the divisor and making it a constant
+	dividend := timingCircuit(sensor)
+	dur := dividend / divisor
+
+	return dur
+}
+
+func trigger(ensor *HCSR04) {
+	sensor.TriggerPin.High()
+	delay(15)
+	sensor.TriggerPin.Low()
+
+	for i := 0; i < hardStop && sensor.EchoPin.Read() != rpio.High; i++ {
+	}
+}
+
+func setSensorPinsState(sensor *HCSR04) {
 	sensor.TriggerPin.Output()
 	sensor.EchoPin.Output()
 	sensor.TriggerPin.Low()
 	sensor.EchoPin.Low()
 
 	sensor.EchoPin.Input()
+}
 
-	delay(6000)
-
-	// Send trigger pluse
-	sensor.TriggerPin.High()
-	delay(15)
-	sensor.TriggerPin.Low()
-
-	hardStop := 1000000
-
-	// Burst Loop - Wait for the module to send the 8 cycle burst
-	for i := 0; i < hardStop && sensor.EchoPin.Read() != rpio.High; i++ {
-	}
-
-	// Timing Circuit / Signal back
+func timingCircuit(sensor *HCSR04) float64 {
 	start := time.Now()
 	for i := 0; i < hardStop && sensor.EchoPin.Read() != rpio.Low; i++ {
 		delay(1)
 	}
 	stop := time.Now()
 
-	// Calculation
-	// Golang doesn't offer a unix epoch time in microseconds. Need to shift by 1000 to get to microsecond
-	// The datasheet says 'uS/58 = centimeters', if I multiple the 58 by 1000 this makes the Formula 'nS/58000 = cm'
-	// I can save a little bit of time and resources by calculating the denominator and making it a constant
-	dur := float64(stop.UnixNano()-start.UnixNano()) / divisor
-	// log.Printf("start: %v stop: %v dur: %v", start.UnixNano(), stop.UnixNano(), dur)
+	diff := float64(stop.UnixNano() - start.UnixNano())
 
-	return dur
+	log.Printf("timingCircuit - start: %v stop: %v diff: %v", start.UnixNano(), stop.UnixNano(), diff)
+	return diff
 }
 
 func delay(mu int) {
