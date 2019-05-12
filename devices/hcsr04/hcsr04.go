@@ -53,32 +53,21 @@ func NewHCSR04(echoPin int, triggerPin int) HCSR04 {
 
 // Measure : Takes a measurement then returns the distance in centimeter
 func (sensor *HCSR04) Measure() float64 {
-	setSensorPinsState(sensor)
-
-	delay(6000)
-
+	initalizeSensor(sensor)
+	delay(6000) // minimum of 5000.
 	trigger(sensor)
+	dividend := timingCircuit(sensor)
 
 	// Calculation
 	// Golang doesn't offer a unix epoch time in microseconds. Need to shift by 1000 to get to microsecond
 	// The datasheet says 'uS/58 = centimeters', if I multiple the 58 by 1000 this makes the Formula 'nS/58000 = cm'
 	// I can save a little bit of time and resources by calculating the divisor and making it a constant
-	dividend := timingCircuit(sensor)
 	dur := dividend / divisor
 
 	return dur
 }
 
-func trigger(sensor *HCSR04) {
-	sensor.TriggerPin.High()
-	delay(15)
-	sensor.TriggerPin.Low()
-
-	for i := 0; i < hardStop && sensor.EchoPin.Read() != rpio.High; i++ {
-	}
-}
-
-func setSensorPinsState(sensor *HCSR04) {
+func initalizeSensor(sensor *HCSR04) {
 	sensor.TriggerPin.Output()
 	sensor.EchoPin.Output()
 	sensor.TriggerPin.Low()
@@ -87,7 +76,16 @@ func setSensorPinsState(sensor *HCSR04) {
 	sensor.EchoPin.Input()
 }
 
+func trigger(sensor *HCSR04) {
+	sensor.TriggerPin.High()
+	delay(15) // minimun value of 10.
+	sensor.TriggerPin.Low()
+}
+
 func timingCircuit(sensor *HCSR04) float64 {
+	for i := 0; i < hardStop && sensor.EchoPin.Read() != rpio.High; i++ {
+	}
+
 	start := time.Now()
 	for i := 0; i < hardStop && sensor.EchoPin.Read() != rpio.Low; i++ {
 		delay(1)
