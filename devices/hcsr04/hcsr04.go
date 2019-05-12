@@ -24,7 +24,7 @@ import (
 	"github.com/stianeikeland/go-rpio"
 )
 
-const offset = 58000.0
+const divisor = 58000.0
 
 // HCSR04 : Model to keep track the GPIO pins to use
 type HCSR04 struct {
@@ -82,7 +82,7 @@ func (sensor *HCSR04) Measure() float64 {
 	// Golang doesn't offer a unix epoch time in microseconds. Need to shift by 1000 to get to microsecond
 	// The datasheet says 'uS/58 = centimeters', if I multiple the 58 by 1000 this makes the Formula 'nS/58000 = cm'
 	// I can save a little bit of time and resources by calculating the denominator and making it a constant
-	dur := float64(stop.UnixNano()-start.UnixNano()) / offset
+	dur := float64(stop.UnixNano()-start.UnixNano()) / divisor
 	// log.Printf("start: %v stop: %v dur: %v", start.UnixNano(), stop.UnixNano(), dur)
 
 	return dur
