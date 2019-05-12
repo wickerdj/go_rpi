@@ -69,7 +69,7 @@ func (sensor *HCSR04) Measure() float64 {
 	return dur
 }
 
-func trigger(ensor *HCSR04) {
+func trigger(sensor *HCSR04) {
 	sensor.TriggerPin.High()
 	delay(15)
 	sensor.TriggerPin.Low()
