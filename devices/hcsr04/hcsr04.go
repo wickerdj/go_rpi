@@ -19,7 +19,6 @@
 package hcsr04
 
 import (
-	"log"
 	"time"
 
 	"github.com/stianeikeland/go-rpio"
@@ -54,7 +53,7 @@ func NewHCSR04(echoPin int, triggerPin int) HCSR04 {
 // Measure : Takes a measurement then returns the distance in centimeter
 //
 // Sensor has a resolution of 0.3cm.
-func (sensor *HCSR04) Measure() float32 {
+func (sensor *HCSR04) Measure() float64 {
 	initalizeSensor(sensor)
 	delay(6000) // minimum of 5000.
 	trigger(sensor)
@@ -66,7 +65,7 @@ func (sensor *HCSR04) Measure() float32 {
 	// I can save a little bit of time and resources by calculating the divisor and making it a constant
 	dur := dividend / divisor
 
-	return float32(round(dur, 0.05))
+	return round(dur, 0.05)
 }
 
 func round(x, unit float64) float64 {
@@ -104,7 +103,7 @@ func timingCircuit(sensor *HCSR04) float64 {
 
 	diff := float64(stop.UnixNano() - start.UnixNano())
 
-	log.Printf("timingCircuit - start: %v stop: %v diff: %v", start.UnixNano(), stop.UnixNano(), diff)
+	// log.Printf("timingCircuit - start: %v stop: %v diff: %v", start.UnixNano(), stop.UnixNano(), diff)
 	return diff
 }
 
