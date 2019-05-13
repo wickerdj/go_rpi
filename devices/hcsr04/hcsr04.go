@@ -16,6 +16,7 @@
 // receiving echo signal. Formula: uS / 58 = centimeters or uS / 148 =inch; or: the
 // range = high level time * velocity (340M/S) / 2; we suggest to use over 60ms
 // measurement cycle, in order to prevent trigger signal to the echo signal.
+//
 package hcsr04
 
 import (
@@ -52,6 +53,8 @@ func NewHCSR04(echoPin int, triggerPin int) HCSR04 {
 }
 
 // Measure : Takes a measurement then returns the distance in centimeter
+//
+// Sensor has a resolution of 0.3cm.
 func (sensor *HCSR04) Measure() float64 {
 	initalizeSensor(sensor)
 	delay(6000) // minimum of 5000.
@@ -64,7 +67,15 @@ func (sensor *HCSR04) Measure() float64 {
 	// I can save a little bit of time and resources by calculating the divisor and making it a constant
 	dur := dividend / divisor
 
-	return dur
+	return round(dur, 0.05)
+}
+
+func round(x, unit float64) float64 {
+	// https://stackoverflow.com/questions/39544571/golang-round-to-nearest-0-05/39544897#39544897
+	if x > 0 {
+		return float64(int64(x/unit+0.5)) * unit
+	}
+	return float64(int64(x/unit-0.5)) * unit
 }
 
 func initalizeSensor(sensor *HCSR04) {
