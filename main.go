@@ -13,7 +13,7 @@ func exampleUsingHcsr() {
 
 	for true {
 		distance := h.Measure()
-		fmt.Printf("object is %.2fcm away\n", distance)
+		fmt.Printf("object is %.1fcm away\n", distance)
 		time.Sleep(time.Second)
 	}
 }
