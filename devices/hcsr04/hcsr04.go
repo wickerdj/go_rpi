@@ -16,7 +16,6 @@
 // receiving echo signal. Formula: uS / 58 = centimeters or uS / 148 =inch; or: the
 // range = high level time * velocity (340M/S) / 2; we suggest to use over 60ms
 // measurement cycle, in order to prevent trigger signal to the echo signal.
-//
 package hcsr04
 
 import (
