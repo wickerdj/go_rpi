@@ -54,7 +54,7 @@ func NewHCSR04(echoPin int, triggerPin int) HCSR04 {
 // Measure : Takes a measurement then returns the distance in centimeter
 //
 // Sensor has a resolution of 0.3cm.
-func (sensor *HCSR04) Measure() float64 {
+func (sensor *HCSR04) Measure() float32 {
 	initalizeSensor(sensor)
 	delay(6000) // minimum of 5000.
 	trigger(sensor)
@@ -66,7 +66,7 @@ func (sensor *HCSR04) Measure() float64 {
 	// I can save a little bit of time and resources by calculating the divisor and making it a constant
 	dur := dividend / divisor
 
-	return round(dur, 0.05)
+	return float32(round(dur, 0.05))
 }
 
 func round(x, unit float64) float64 {
